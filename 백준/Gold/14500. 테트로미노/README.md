@@ -26,7 +26,7 @@
 
 <p>정사각형 4개를 이어 붙인 폴리오미노는 테트로미노라고 하며, 다음과 같은 5가지가 있다.</p>
 
-<img src="https://github.com/judah2023/Solve_Algorithms/assets/124682191/435d9e8f-a9dc-4c29-8cf5-448312c27852"  width="250" height="167"/>
+<p style="text-align:center"><a href="https://commons.wikimedia.org/wiki/File:All_5_free_tetrominoes.svg"><img alt="" src="" style="height:167px; width:250px"></a></p>
 
 <p>아름이는 크기가 N×M인 종이 위에 테트로미노 하나를 놓으려고 한다. 종이는 1×1 크기의 칸으로 나누어져 있으며, 각각의 칸에는 정수가 하나 쓰여 있다.</p>
 
