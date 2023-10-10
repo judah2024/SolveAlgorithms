@@ -28,6 +28,8 @@
 
 <p style="text-align:center"><a href="https://commons.wikimedia.org/wiki/File:All_5_free_tetrominoes.svg"><img alt="" src="" style="height:167px; width:250px"></a></p>
 
+![90px-All_5_free_tetrominoes svg](https://github.com/judah2023/Solve_Algorithms/assets/124682191/435d9e8f-a9dc-4c29-8cf5-448312c27852)
+
 <p>아름이는 크기가 N×M인 종이 위에 테트로미노 하나를 놓으려고 한다. 종이는 1×1 크기의 칸으로 나누어져 있으며, 각각의 칸에는 정수가 하나 쓰여 있다.</p>
 
 <p>테트로미노 하나를 적절히 놓아서 테트로미노가 놓인 칸에 쓰여 있는 수들의 합을 최대로 하는 프로그램을 작성하시오.</p>
