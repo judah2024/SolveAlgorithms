@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -9,7 +11,7 @@ long long DP(vector<vector<long long>>& dp, const int& n)
     {
         for (int j = 0; j < 2; j++)
         {
-            dp[i][j] += max(dp[i - 1][!j], max(dp[i - 2][0], dp[i - 2][1]));
+            dp[i][j] += max(dp[i - 1][!j], dp[i - 2][!j]);
         }
     }
 
@@ -24,16 +26,21 @@ int main()
     for (int i = 0; i < t; i++)
     {
         cin >> n;
+        cin.ignore();
         vector<vector<long long>> dp(n + 1, vector<long long>(2));
 
-        for (int upIdx = 1; upIdx <= n; upIdx++)
+        for (int j = 0; j < 2; j++)
         {
-            cin >> dp[upIdx][0];
-        }
+            string s;
+            int idx = 1;
 
-        for (int downIdx = 1; downIdx <= n; downIdx++)
-        {
-            cin >> dp[downIdx][1];
+            getline(cin, s);
+            stringstream ss(s);
+
+            while (!ss.eof())
+            {
+                ss >> dp[idx++][j];
+            }
         }
 
         cout << DP(dp, n) << "\n";
