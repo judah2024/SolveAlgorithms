@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void PreOrder(unordered_map<char, vector<char>>& bTree, char node)
+void PrintTree(unordered_map<char, vector<char>>& bTree, char node, const int mode)
 {
     if (node == '.')
     {
@@ -16,43 +16,14 @@ void PreOrder(unordered_map<char, vector<char>>& bTree, char node)
         return;
     }
 
-    cout << node;
-    PreOrder(bTree, bTree[node][0]);
-    PreOrder(bTree, bTree[node][1]);
-}
-
-void InOrder(unordered_map<char, vector<char>>& bTree, char node)
-{
-    if (node == '.')
-    {
-        return;
-    }
-
-    if (bTree[node].size() < 2)
-    {
-        return;
-    }
-
-    InOrder(bTree, bTree[node][0]);
-    cout << node;
-    InOrder(bTree, bTree[node][1]);
-}
-
-void PostOrder(unordered_map<char, vector<char>>& bTree, char node)
-{
-    if (node == '.')
-    {
-        return;
-    }
-
-    if (bTree[node].size() < 2)
-    {
-        return;
-    }
-
-    PostOrder(bTree, bTree[node][0]);
-    PostOrder(bTree, bTree[node][1]);
-    cout << node;
+    if (mode == 0)
+        cout << node;
+    PrintTree(bTree, bTree[node][0], mode);
+    if (mode == 1)
+        cout << node;
+    PrintTree(bTree, bTree[node][1], mode);
+    if (mode == 2)
+        cout << node;
 }
 
 int main()
@@ -73,12 +44,11 @@ int main()
         bTree[a].push_back(c);
     }
 
-    PreOrder(bTree, 'A');
-    cout << "\n";
-    InOrder(bTree, 'A');
-    cout << "\n";
-    PostOrder(bTree, 'A');
-    cout << "\n";
+    for (int i = 0; i < 3; i++)
+    {
+        PrintTree(bTree, 'A', i);
+        cout << "\n";
+    }
 
     return 0;
 }
