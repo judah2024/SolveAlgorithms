@@ -8,7 +8,7 @@ using PII = pair<int, int>;
 
 const int mStep = 100;
 const int sCondition = 3 * mStep + 1;
-const int eCondition = 12 * mStep + 1;
+const int eCondition = 12 * mStep + 0;
 
 int CalculateMinFlowerCount(const vector<PII>& flowers)
 {
@@ -63,7 +63,7 @@ int main()
         int e = eM * mStep + eD;
 
         if (e < sCondition) continue;
-        if (s >= eCondition) continue;
+        if (s > eCondition) continue;
 
         flowers.push_back({ s, e });
     }
