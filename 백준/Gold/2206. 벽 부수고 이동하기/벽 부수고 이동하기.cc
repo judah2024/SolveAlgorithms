@@ -1,98 +1,62 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-
+// Authored by : windowdong11
+// Co-authored by : BaaaaaaaaaaarkingDog
+// http://boj.kr/234d6a92de444d5c8d78bfae0286be7d
+#include <bits/stdc++.h>
 using namespace std;
-using PII = pair<int, int>;
+#define X first
+#define Y second
 
-struct GridInfo
-{
-    PII coord;
-    bool hasWallPass;
-};
+int dx[4] = {0,1,0,-1};
+int dy[4] = {1,0,-1,0};
 
-bool IsWithinBound(const int x, const int y, const int n, const int m)
-{
-    bool xBoundCheck = (0 <= x) && (x < n);
-    bool yBoundCheck = (0 <= y) && (y < m);
+char board[1000][1000];
+int dist[1000][1000][2];
+// dist[x][y][0] : 벽을 하나도 부수지 않고 (x,y)까지 오는데 걸리는 비용
+// dist[x][y][1] : 벽을 하나만 부수고 (x,y)까지 오는데 걸리는 비용, (x,y)가 벽이라서 부수는 경우 포함
+int n, m;
 
-    return xBoundCheck && yBoundCheck;
+bool OOB(int x, int y){
+  return x < 0 || x >= n || y < 0 || y >= m;
 }
 
-vector<vector<int>> InitializeGrid(const int n, const int m)
-{
-    vector<vector<int>> grid(n, vector<int>(m));
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            char ch;
-            cin >> ch;
-            grid[i][j] = static_cast<int>(ch - '0');
-        }
+int bfs() {
+  for (int i = 0; i < n; ++i)
+    for (int j = 0; j < m; ++j)
+      dist[i][j][0] = dist[i][j][1] = -1;
+  dist[0][0][0] = dist[0][0][1] = 1;
+  queue<tuple<int, int, int>> q;
+  q.push({0,0,0});
+  while (!q.empty()) {
+    int x, y, broken;
+    tie(x, y, broken) = q.front();
+    if(x == n-1 && y == m-1) return dist[x][y][broken];
+    q.pop();
+    int nextdist = dist[x][y][broken] + 1;
+    for (int dir = 0; dir < 4; ++dir) {
+      int nx = x + dx[dir];
+      int ny = y + dy[dir];
+      if(OOB(nx, ny)) continue;      
+      if (board[nx][ny] == '0' && dist[nx][ny][broken] == -1) {
+        dist[nx][ny][broken] = nextdist;
+        q.push({nx, ny, broken});
+      }      
+      // (nx, ny)를 부수는 경우
+      if (!broken && board[nx][ny] == '1' && dist[nx][ny][1] == -1) {
+        dist[nx][ny][1] = nextdist;
+        q.push({nx, ny, 1});
+      }      
     }
-
-    return grid;
+  }
+  return -1;
 }
 
-int BFS(vector<vector<int>>& grid, const int n, const int m)
-{
-    const PII start = { 0, 0 };
-    const PII goal = { n - 1, m - 1 };
-    const vector<PII> dir = { {1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
-
-    queue<GridInfo> que;
-    vector<vector<vector<int>>> dist(n, vector<vector<int>>(m, vector<int>(2, -1)));
-
-    que.push({ start, true });
-    dist[start.first][start.second][1] = 1;
-
-    while (!que.empty())
-    {
-        auto currInfo = que.front(); que.pop();
-        PII curr = currInfo.coord;
-        bool hasWallPass = currInfo.hasWallPass;
-        int currCount = dist[curr.first][curr.second][hasWallPass];
-
-        if (curr == goal)
-        {
-            return currCount;
-        }
-
-        for (auto& it : dir)
-        {
-            int x = curr.first + it.first;
-            int y = curr.second + it.second;
-
-            if (!IsWithinBound(x, y, n, m)) continue;
-            if (!hasWallPass && grid[x][y] == 1) continue;
-            if (dist[x][y][hasWallPass] > 0) continue;
-
-            GridInfo next = { {x, y}, hasWallPass };
-            if (grid[x][y] == 1)
-            {
-                next.hasWallPass = false;
-            }
-
-            que.push(next);
-            dist[x][y][next.hasWallPass] = currCount + 1;
-        }
-
-    }
-
-    return -1;
-}
-
-int main()
-{
-    ios_base::sync_with_stdio(false); cin.tie(nullptr);
-
-    int n, m;
-    cin >> n >> m;
-
-    vector<vector<int>> grid = InitializeGrid(n, m);
-
-    cout << BFS(grid, n, m);
-
-    return 0;
+int main(void) {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  cin >> n >> m;
+  for (int i = 0; i < n; ++i)
+    for (int j = 0; j < m; ++j)
+      cin >> board[i][j];
+  cout << bfs();
+  return 0;
 }
