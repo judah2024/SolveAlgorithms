@@ -1,16 +1,16 @@
 #include <iostream>
-#include <unordered_map>
+#include <map>
 
 using namespace std;
 
 const int divisor = 1'000'000'007;
-unordered_map<long long, long long> fibos;
+map<long long, long long> fibos;
 
 void InitFibos()
 {
     long long a = 0, b = 1;
 
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 10; i++)
     {
         fibos[i] = a;
 
