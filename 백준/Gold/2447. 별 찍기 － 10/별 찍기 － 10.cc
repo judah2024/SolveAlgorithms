@@ -13,14 +13,11 @@ void MakeFractal(vector<string>& fractal, int n, bool isEmpty, int x, int y)
     }
 
     n /= 3;
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 9; i++)
     {
-        for (int j = 0; j < 3; j++)
-        {
-            bool EmptyFlag = (i * 3 + j == 4 ? true : false);
+        bool EmptyFlag = (i == 4 ? true : false);
 
-            MakeFractal(fractal, n, isEmpty || EmptyFlag, x + i * n, y + j * n);
-        }
+        MakeFractal(fractal, n, isEmpty || EmptyFlag, x + (i / 3) * n, y + (i % 3) * n);
     }
 }
 
