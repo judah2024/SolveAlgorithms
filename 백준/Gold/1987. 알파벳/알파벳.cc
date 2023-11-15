@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <unordered_map>
 
 using namespace std;
 
@@ -10,6 +9,12 @@ const vector<PII> dir = {
     {1, 0}, {-1, 0}, {0, 1}, {0, -1}
 };
 
+bool IsWithinBound(const int r, const int c, const int x, const int y)
+{
+    return (0 <= x) && (x < r)
+        && (0 <= y) && (y < c);
+}
+
 int DFS(const int r, const int c,const vector<vector<char>>& grid, const PII& curr, vector<bool>& hasAlready)
 {
     int dist = 0;
@@ -18,8 +23,7 @@ int DFS(const int r, const int c,const vector<vector<char>>& grid, const PII& cu
         int x = curr.first + it.first;
         int y = curr.second + it.second;
 
-        if ((0 <= x) && (x < r)
-         && (0 <= y) && (y < c))
+        if (IsWithinBound(r, c, x, y))
         {
             const char alphaIndex = grid[x][y] - 'A';
             if (hasAlready[alphaIndex]) continue;
