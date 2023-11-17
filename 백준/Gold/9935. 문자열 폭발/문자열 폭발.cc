@@ -1,75 +1,36 @@
 #include <iostream>
 #include <string>
-#include <stack>
 
 using namespace std;
 
 using PII = pair<int, int>;
 
-string ExplodeString(string& orgin, const string& compare)
+bool hasBoom(const string& str, const string& boom)
 {
-    stack<PII> stk;
-    int oI = 0, cI = 0, oE = 0;
-
-    for (int i = 0; i < orgin.size(); i++, oE++)
+    int idx = str.size() - boom.size();
+    for (int j = 0; j < boom.size(); j++)
     {
-        orgin[oE] = orgin[i];
+        if (str[idx + j] != boom[j])
+            return false;
+    }
+    return true;
+}
 
-        if (orgin[oE] == compare[cI])
-        {
-            cI++;
-        }
-        else
-        {
-            if (cI > 0)
-            {
-                stk.push({ oI, oE });
+string ExplodeString(string& orgin, const string& boom)
+{
+    string str;
+    str.reserve(orgin.size());
 
-                i--;
-                oE--;
-                oI = oE;
-            }
-            else
-            {
-                while (!stk.empty())
-                {
-                    stk.pop();
-                }
-            }
-            cI = 0;
-            oI++;
-        }
-        
-        if (cI == compare.size())
-        {
-            oE -= cI;
-            cI = 0;
-
-            if (!stk.empty())
-            {
-                auto prev = stk.top(); stk.pop();
-                oI = prev.first;
-                cI = prev.second - oI;
-            }
-        }
+    for (int i = 0; i < orgin.size(); i++)
+    {
+        str += orgin[i];
+        if (str.back() == boom.back())
+            if (str.size() >= boom.size())
+                if (hasBoom(str, boom))
+                    str.resize(str.size() - boom.size());
     }
 
-    for (int i = oE; i < orgin.size(); i++)
-    {
-        orgin[i] = ' ';
-    }
-
-    string newStr;
-    newStr.reserve(orgin.size());
-    for (auto& it : orgin)
-    {
-        if (it != ' ')
-        {
-            newStr += it;
-        }
-    }
-    
-    return newStr;
+    return str;
 }
 
 int main()
@@ -80,7 +41,6 @@ int main()
     cin >> orgin >> compare;
 
     string result = ExplodeString(orgin, compare);
-
     cout << (result.size() == 0 ? "FRULA" : result);
 
     return 0;
