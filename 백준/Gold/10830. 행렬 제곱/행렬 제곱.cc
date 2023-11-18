@@ -5,32 +5,6 @@ using namespace std;
 using Matrix = vector<vector<int>>;
 using Row = vector<int>;
 
-istream& operator>> (istream& is, Matrix& matrix)
-{
-    for (auto& row : matrix)
-    {
-        for (auto& it : row)
-        {
-            is >> it;
-        }
-    }
-    return is;
-}
-
-ostream& operator<< (ostream& os, const Matrix& matrix)
-{
-    const int n = matrix.size();
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            os << matrix[i][j] << " ";
-        }
-        cout << "\n";
-    }
-    return os;
-}
-
 Matrix operator* (const Matrix& lhs, const Matrix& rhs)
 {
     const int n = lhs.size();
@@ -42,7 +16,8 @@ Matrix operator* (const Matrix& lhs, const Matrix& rhs)
         {
             for (int k = 0; k < n; k++)
             {
-                newMatrix[i][j] += lhs[i][k] * rhs[k][j];
+                if (lhs[i][k] != 0 && rhs[k][j] != 0)
+                    newMatrix[i][j] += lhs[i][k] * rhs[k][j];
             }
             newMatrix[i][j] %= 1000;
         }
@@ -80,9 +55,24 @@ int main()
     cin >> n >> b;
 
     Matrix matrix(n, Row(n));
-    cin >> matrix;
+    for (auto& row : matrix)
+    {
+        for (auto& it : row)
+        {
+            cin >> it;
+        }
+    }
 
-    cout << PowMatrix(matrix, b);
+    Matrix result = PowMatrix(matrix, b);
+    for (auto& row : result)
+    {
+        for (auto& it : row)
+        {
+            cout << it << " ";
+        }
+        cout << "\n";
+    }
+
 
     return 0;
 }
