@@ -1,59 +1,38 @@
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-vector<int> CalculateEventResult(const vector<vector<int>>& users, const vector<int>& emoticons,
-    vector<int>& discounts)
-{
-    vector<int> result = { 0, 0 };
+int max_user = -1;
+int max_value = -1;
+int discounts[7];
+vector<int> answer(2, 0);
 
-    for (auto& user : users)
-    {
-        int totalPrice = 0;
-        for (int i = 0; i < discounts.size(); i++)
-        {
-            int& rate = discounts[i];
-            if (user[0] <= rate)
-            {
-                totalPrice += emoticons[i] * (100 - rate) / 100;
+void getComb(int pos, vector<vector<int>> &users, vector<int> &emoticons) {
+    if (pos == emoticons.size()) {
+        int total_price = 0;
+        int total_user = 0;
+
+        for (int i = 0; i < users.size(); i++) {
+            int tmp = 0;
+            for (int j = 0; j < emoticons.size(); j++) {
+                if (discounts[j] >= users[i][0])
+                    tmp += emoticons[j] * (100 - discounts[j]) / 100;
             }
+
+            if (tmp >= users[i][1]) total_user++;
+            else total_price += tmp;
         }
 
-        if (totalPrice >= user[1])
-        {
-            result[0]++;
-        }
-        else
-        {
-            result[1] += totalPrice;
-        }
+        answer = max(answer, {total_user, total_price});
+        return;
     }
 
-    return result;
-}
-
-vector<int> BackTracking(const vector<vector<int>>& users, const vector<int>& emoticons,
-    vector<int>& discounts)
-{
-    int index = discounts.size();
-    if (index == emoticons.size())
-    {
-        return CalculateEventResult(users, emoticons, discounts);
+    for (int i = 1; i <= 4; i++) {
+        discounts[pos] = i * 10;
+        getComb(pos + 1, users, emoticons);
     }
-
-    vector<int> result = { 0, 0 };
-    for (auto& rate : { 40, 30, 20, 10 })
-    {
-        discounts.push_back(rate);
-        result = max(result, BackTracking(users, emoticons, discounts));
-        discounts.pop_back();
-    }
-    return result;
 }
 
 vector<int> solution(vector<vector<int>> users, vector<int> emoticons) {
-    vector<int> discounts;
-    discounts.reserve(emoticons.size());
-
-    return BackTracking(users, emoticons, discounts);
+    getComb(0, users, emoticons);
+    return answer;
 }
