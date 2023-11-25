@@ -3,45 +3,16 @@
 #include <stack>
 
 using namespace std;
-
-bool IsHill(const int prev, const int curr, const int next)
-{
-    return prev < curr && next < curr;
-}
-
-int solution(vector<int> a)
-{
-    stack<int> stk;
-    stk.push(a[0]);
-    
-    for (int i = 1; i < a.size() - 1; i++)
-    {
-        int curr = a[i];
-        int prev = stk.top();
-        int next = a[i + 1];
-        
-        if (IsHill(prev, curr, next))
-        {
-            while (stk.size() > 1)
-            {
-                curr = prev; stk.pop();
-                prev = stk.top();
-
-                if (!IsHill(prev, curr, next))
-                {
-                    stk.push(curr);
-                    break;
-                }
-
-            }
+int solution(vector<int> a) {
+    int answer = a.size();
+    stack<int> stack;
+    for(int comp : a){
+        while(!stack.empty() && comp < stack.top()){
+            stack.pop();
+            if(!stack.empty())
+                answer--;
         }
-        else
-        {
-            stk.push(a[i]);
-        }
+        stack.push(comp);
     }
-
-    stk.push(a.back());
-
-    return stk.size();
+    return answer;
 }
