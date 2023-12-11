@@ -3,52 +3,48 @@
 
 using namespace std;
 
-vector<int> solution(int n, vector<vector<int>> roads, vector<int> sources, int destination)
+const int inf = 1e7;
+
+vector<int> BFS(const vector<vector<int>>& graph, int destination)
 {
-    vector<int> answer;
-    vector<vector<int>> adj(100001);
-
-    for (int i = 0; i < roads.size(); ++i)
+    vector<int> dist(graph.size(), inf);
+    queue<int> que;
+    
+    dist[destination] = 0;
+    que.push(destination);
+    
+    while(!que.empty())
     {
-        adj[roads[i][0]].push_back(roads[i][1]);
-        adj[roads[i][1]].push_back(roads[i][0]);
-    }
-
-    for (int i = 0; i < sources.size(); ++i)
-    {
-        int d = -1;
-        queue<pair<int, int>> que;
-        vector<bool> isVisited(100001, false);
-
-        isVisited[sources[i]] = true;
-        que.push({ sources[i], 0 });
-        while (!que.empty())
+        auto curr = que.front(); que.pop();
+        
+        for (auto& next : graph[curr])
         {
-            auto item = que.front();
-            int road = item.first;
-            int cnt = item.second;
-
-            que.pop();
-
-            if (road == destination)
+            if (dist[next] > dist[curr] + 1)
             {
-                d = cnt;
-
-                break;
-            }
-
-            for (int j = 0; j < adj[road].size(); ++j)
-            {
-                int next = adj[road][j];
-                if (!isVisited[next])
-                {
-                    isVisited[next] = true;
-                    que.push({ next, cnt + 1 });
-                }
+                dist[next] = dist[curr] + 1;
+                que.push(next);
             }
         }
+    }
+    
+    return dist;
+}
 
-        answer.push_back(d);
+vector<int> solution(int n, vector<vector<int>> roads, vector<int> sources, int destination) {
+
+    vector<vector<int>> graph(n + 1);
+    for (auto road : roads)
+    {
+        int u = road[0], v = road[1];
+        graph[u].push_back(v);
+        graph[v].push_back(u);
+    }
+
+    vector<int> dist = BFS(graph, destination);
+    vector<int> answer;
+    for (auto& start : sources)
+    {
+        answer.push_back(dist[start] == inf ? -1 : dist[start]);
     }
 
     return answer;
