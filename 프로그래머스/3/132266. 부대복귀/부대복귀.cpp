@@ -1,54 +1,54 @@
-#include <string>
 #include <vector>
 #include <queue>
 
 using namespace std;
 
-const int inf = 1e7;
-
-vector<int> Dijkstra(const int n, const vector<vector<int>>& graph, const int start)
+vector<int> solution(int n, vector<vector<int>> roads, vector<int> sources, int destination)
 {
-    vector<int> dist(n + 1, inf);
-    priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pQue;
+    vector<int> answer;
+    vector<vector<int>> adj(100001);
 
-    dist[start] = 0;
-    pQue.push({ dist[start], start});
-
-    while (!pQue.empty())
+    for (int i = 0; i < roads.size(); ++i)
     {
-        auto currInfo = pQue.top(); pQue.pop();
-        int currDist = currInfo[0], curr = currInfo[1];
+        adj[roads[i][0]].push_back(roads[i][1]);
+        adj[roads[i][1]].push_back(roads[i][0]);
+    }
 
-        if (dist[curr] != currDist) continue;
+    for (int i = 0; i < sources.size(); ++i)
+    {
+        int d = -1;
+        queue<pair<int, int>> que;
+        vector<bool> isVisited(100001, false);
 
-        for (auto& next : graph[curr])
+        isVisited[sources[i]] = true;
+        que.push({ sources[i], 0 });
+        while (!que.empty())
         {
-            if (dist[next] > dist[curr] + 1)
+            auto item = que.front();
+            int road = item.first;
+            int cnt = item.second;
+
+            que.pop();
+
+            if (road == destination)
             {
-                dist[next] = dist[curr] + 1;
-                pQue.push({ dist[next], next });
+                d = cnt;
+
+                break;
+            }
+
+            for (int j = 0; j < adj[road].size(); ++j)
+            {
+                int next = adj[road][j];
+                if (!isVisited[next])
+                {
+                    isVisited[next] = true;
+                    que.push({ next, cnt + 1 });
+                }
             }
         }
 
-    }
-    return dist;
-}
-
-vector<int> solution(int n, vector<vector<int>> roads, vector<int> sources, int destination) {
-
-    vector<vector<int>> graph(n + 1);
-    for (auto road : roads)
-    {
-        int u = road[0], v = road[1];
-        graph[u].push_back(v);
-        graph[v].push_back(u);
-    }
-
-    vector<int> dist = Dijkstra(n, graph, destination);
-    vector<int> answer;
-    for (auto& start : sources)
-    {
-        answer.push_back(dist[start] == inf ? -1 : dist[start]);
+        answer.push_back(d);
     }
 
     return answer;
