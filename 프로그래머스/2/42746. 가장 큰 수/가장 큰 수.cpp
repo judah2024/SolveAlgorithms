@@ -21,7 +21,7 @@ string solution(vector<int> numbers) {
     {
         countSet[n]++;
     }
-    
+
     if (countSet[0] == numbers.size())
         return "0";
 
@@ -35,7 +35,8 @@ string solution(vector<int> numbers) {
     string answer = "";
     for (auto& it : nDict)
     {
-        while (countSet[stoi(it)]--)
+        int i = stoi(it);
+        while (countSet[i]--)
         {
             answer += it;
         }
