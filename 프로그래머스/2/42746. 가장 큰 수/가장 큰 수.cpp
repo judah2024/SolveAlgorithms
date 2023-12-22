@@ -6,9 +6,12 @@ using namespace std;
 
 string solution(vector<int> numbers) {
     vector<int> countSet(1001, 0);
+    int sSize = 0;
+    
     for (auto& n : numbers)
     {
         countSet[n]++;
+        sSize += to_string(n).size();
     }
 
     if (countSet[0] == numbers.size())
@@ -28,7 +31,8 @@ string solution(vector<int> numbers) {
         }
     );
 
-    string answer = "";
+    string answer;
+    answer.reserve(sSize);
     for (auto& it : nDict)
     {
         int i = stoi(it);
