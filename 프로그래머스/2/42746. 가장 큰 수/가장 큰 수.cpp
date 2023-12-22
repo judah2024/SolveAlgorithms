@@ -4,17 +4,6 @@
 
 using namespace std;
 
-bool Compare(const string& lhs, const string& rhs)
-{
-    string a = lhs + rhs;
-    string b = rhs + lhs;
-
-    if (a == b)
-        return lhs > rhs;
-
-    return a > b;
-}
-
 string solution(vector<int> numbers) {
     vector<int> countSet(1001, 0);
     for (auto& n : numbers)
@@ -30,7 +19,14 @@ string solution(vector<int> numbers) {
     {
         nDict[i] = to_string(i);
     }
-    sort(nDict.begin(), nDict.end(), Compare);
+    sort(nDict.begin(), nDict.end(), [](const string& lhs, const string& rhs) -> bool
+        {
+            string a = lhs + rhs;
+            string b = rhs + lhs;
+
+            return a >= b;
+        }
+    );
 
     string answer = "";
     for (auto& it : nDict)
