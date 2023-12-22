@@ -1,9 +1,10 @@
 using System;
+using System.Text;
 
 public class Solution {
     public string solution(int[] numbers) {
         int[] countSet = new int[1001];
-        foreach(int n in numbers)
+        foreach(var n in numbers)
         {
             countSet[n]++;
         }
@@ -12,10 +13,12 @@ public class Solution {
             return "0";
         
         string[] nDict = new string[1001];
+        
         for (int i = 0; i<= 1000; i++)
         {
-            nDict[i] = i.ToString();
+            nDict[i] = Convert.ToString(i);
         }
+        
         Array.Sort(nDict, (x, y) =>
             {
                 string a = x + y;
@@ -24,14 +27,19 @@ public class Solution {
             });
         
         string answer = "";
-        foreach(string it in nDict)
+        StringBuilder stringBuilder = new StringBuilder();
+        
+        foreach(var it in nDict)
         {
-            int i = int.Parse(it);
-            while(countSet[i]-- > 0)
+            int i = Convert.ToInt32(it);
+            while(countSet[i] > 0)
             {
-                answer += it;
+                stringBuilder.Append(it);
+                countSet[i]--;
             }
         }
+        
+        answer = stringBuilder.ToString();
         
         return answer;
     }
