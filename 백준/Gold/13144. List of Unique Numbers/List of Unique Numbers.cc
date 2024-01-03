@@ -3,7 +3,7 @@
 
 using namespace std;
 
-long long CountListUniNumbers(const int n, const vector<int>& numbers)
+long long CountUniNumberList(const int n, const vector<int>& numbers)
 {
 	vector<bool> isUsing(100001, false);
 	int i = 0, j = 0;
@@ -26,17 +26,14 @@ long long CountListUniNumbers(const int n, const vector<int>& numbers)
 int main()
 {
 	ios_base::sync_with_stdio(false); cin.tie(nullptr);
-
 	int n;
 	cin >> n;
 
 	vector<int> numbers(n);
 	for (auto& it : numbers)
-	{
 		cin >> it;
-	}
 
-	cout << CountListUniNumbers(n, numbers);
+	cout << CountUniNumberList(n, numbers);
 
 	return 0;
 }
